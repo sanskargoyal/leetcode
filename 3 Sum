@@ -1,0 +1,38 @@
+class Solution {
+ public:
+  vector<vector<int> > threeSum(vector<int> &num) {
+    sort(num.begin(), num.end());
+    vector<vector<int> > ret;
+    vector<int> tuples(3);
+    for (int i = 0; i < num.size(); ++i) {
+      // optimize: ignore repulicate elements since it has been calulated
+      // at previous times.
+      if (i > 0 && num[i] == num[i-1])
+        continue;
+      int target = -num[i];
+      int st = i+1, ed = num.size()-1;
+      while (st < ed) {
+        if (num[st] + num[ed] == target) {
+          tuples[0] = num[i];
+          tuples[1] = num[st];
+          tuples[2] = num[ed];
+          ret.push_back(tuples);
+          ++st;
+          --ed;
+        } else if (num[st] + num[ed] > target) {
+          --ed;
+        } else {
+          ++st;
+        }
+      }
+    }
+    if (ret.empty())
+      return vector<vector<int> >();
+    sort(ret.begin(), ret.end());
+    int len = 1;
+    for (int i = 1; i < ret.size(); ++i)
+      if (ret[len-1] != ret[i])
+        ret[len++] = ret[i];
+    return vector<vector<int> >(ret.begin(), ret.begin()+len);
+  }
+};
